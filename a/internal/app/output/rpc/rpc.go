@@ -47,6 +47,6 @@ func (m messageSender) SendMessage(ctx context.Context, message *business.Messag
 		return err
 	}
 
-	m.info.Printf("RPC: message id %d\n", message.ID)
+	m.info.Printf("Message %d sent through gRPC\n", message.ID)
 	return nil
 }

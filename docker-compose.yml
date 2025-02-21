@@ -98,6 +98,24 @@ services:
       - users-ms-nw
       - kafka_broker_nw
     restart: always
+  notifications-ms-consumer:
+    build:
+      context: ./b
+      args:
+        - TAG=consumer
+      dockerfile: Dockerfile
+    container_name: notifications_microservice_consumer
+    environment:
+      KAFKA_GROUP: ${KAFKA_GROUP}
+      KAFKA_TOPICS: ${KAFKA_TOPICS}
+      KAFKA_SERVERS: ${KAFKA_SERVERS}
+      EXECUTABLE: "notifications-consumer"
+    depends_on:
+      - users-ms-relay
+    networks:
+      # - users-ms-nw
+      - kafka_broker_nw
+    restart: always
 volumes:
   postgres_data:
     name: "users_db_vol"

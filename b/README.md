@@ -1,23 +1,17 @@
-# User microservice
+# Notifications microservice
 
-This project provides a REST API for manage operations related to users (create, update and get)
-in which I implement the [transactional outbox pattern](https://microservices.io/patterns/data/transactional-outbox.html)
-with [the hexagonal pattern](https://alistair.cockburn.us/hexagonal-architecture/) to have the `service/sender` and
-the `message relay` in the same code base to avoid having different projects sharing databases.
+This project provides an API for manage operations related to notifications (ex. send notifications)
 
 ![Component diagram](../docs/components.png)
 
 As the diagram shows, this project is compiled in two parts:
-1. `users-http`  It is the binary in charge of manage the http requests related with users (service/sender)
-2. `users-relay` It is the binary in charge of read and send the messages (message relay)
+1. `notifications-grpc`  It is the binary in charge of manage the gRPC requests related with send notifications (gRPC server)
+2. `notifications-consumer` It is the binary in charge of read the messages to log notifications (kafka consumer)
 
 ### Getting started
 [See the required environment variables](.env.example)
 
-[See the OpenAPI specification](docs/OpenAPI.json)
-
-###### Database schema
-The database schema is described by the `.sql` files in the [sql](scripts/sql) directory.
+[See the API specification]()
 
 ### How to use from source
 Follow the instructions below to compile and locally.
@@ -27,13 +21,13 @@ Follow the instructions below to compile and locally.
 > so should be run using docker compose. [See documentation](../README.md)
 ###### User service (sender)
 ```shell
-make http
-./build/users-http
+make grpc
+./build/notifications-grpc
 ```
 ###### Message relay
 ```shell
-make relay
-./build/users-relay
+make consumer
+./build/notifications-consumer
 ```
 
 ### Architecture decisions

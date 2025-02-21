@@ -4,9 +4,11 @@ go 1.23
 
 require (
 	github.com/confluentinc/confluent-kafka-go/v2 v2.5.3
+	github.com/google/uuid v1.6.0
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/lib/pq v1.10.9
-	google.golang.org/protobuf v1.35.2
+	github.com/yael-castro/orbi/b v0.0.0-20250221193220-ab3f4b9131b3
+	google.golang.org/grpc v1.70.0
 )
 
 require (
@@ -21,5 +23,5 @@ require (
 	golang.org/x/text v0.21.0 // indirect
 	golang.org/x/time v0.8.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241202173237-19429a94021a // indirect
-	google.golang.org/grpc v1.70.0 // indirect
+	google.golang.org/protobuf v1.35.2 // indirect
 )
