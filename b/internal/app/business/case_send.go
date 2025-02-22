@@ -11,6 +11,7 @@ func NewSendNotificationCase(notificationStore NotificationStore, userStore User
 	}
 
 	return sendNotificationCase{
+		userStore:         userStore,
 		notificationStore: notificationStore,
 	}, nil
 }
