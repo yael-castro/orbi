@@ -4,8 +4,11 @@ package container
 
 import (
 	"context"
+	"github.com/yael-castro/orbi/a/pkg/env"
+	"github.com/yael-castro/orbi/a/pkg/userapi"
 	"github.com/yael-castro/orbi/b/internal/app/business"
 	"github.com/yael-castro/orbi/b/internal/app/handler/rpc"
+	"github.com/yael-castro/orbi/b/internal/app/repository/http"
 	"github.com/yael-castro/orbi/b/internal/app/repository/postgres"
 	"github.com/yael-castro/orbi/b/pkg/interceptor"
 	"github.com/yael-castro/orbi/b/pkg/pb"
@@ -13,6 +16,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"os"
+	"time"
 )
 
 func New() Container {
@@ -33,20 +37,49 @@ func (c *containerGRPC) Inject(ctx context.Context, a any) error {
 	return c.container.Inject(ctx, a)
 }
 
-func (c *containerGRPC) injectServer(_ context.Context, a **grpc.Server) (err error) {
-	info := log.New(os.Stdout, "[INFO]", log.LstdFlags)
-
-	store, err := postgres.NewNotificationStore(info)
+func (c *containerGRPC) injectServer(ctx context.Context, a **grpc.Server) (err error) {
+	// Environment variables
+	address, err := env.Get("USERS_API_ADDRESS")
 	if err != nil {
 		return err
 	}
 
-	greeter, err := business.NewNotificationCases(store)
+	// Building external dependencies
+	api, err := userapi.New(address)
+	if err != nil {
+		return err
+	}
+
+	const pingTimeout = time.Second * 5
+	ctx, cancel := context.WithTimeout(ctx, pingTimeout)
+	defer cancel()
+
+	err = api.Ping(ctx)
+	if err != nil {
+		return err
+	}
+
+	info := log.New(os.Stdout, "[INFO]", log.LstdFlags)
+
+	// Building driven adapters
+	notificationStore, err := postgres.NewNotificationStore(info)
+	if err != nil {
+		return err
+	}
+
+	userStore, err := http.NewUserStore(api)
+	if err != nil {
+		return err
+	}
+
+	// Building business logic
+	sender, err := business.NewSendNotificationCase(notificationStore, userStore)
 	if err != nil {
 		return
 	}
 
-	service, err := rpc.NewNotificationServiceServer(greeter)
+	// Building drive adapters
+	service, err := rpc.NewNotificationServiceServer(sender)
 	if err != nil {
 		return
 	}

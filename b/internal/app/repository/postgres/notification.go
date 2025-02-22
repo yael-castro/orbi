@@ -21,12 +21,12 @@ type notificationStore struct {
 	info *log.Logger
 }
 
-func (n notificationStore) SendNotification(ctx context.Context, notification business.Notification) error {
+func (n notificationStore) SendNotification(_ context.Context, notification business.Notification) error {
 	n.info.Printf("SendNotification: %+v", notification)
 	return nil
 }
 
-func (n notificationStore) SaveNotification(ctx context.Context, notification business.Notification) error {
-	n.info.Printf("SaveNotification: %+v\n", notification)
+func (n notificationStore) SaveNotificationRequest(_ context.Context, request business.NotificationRequest) error {
+	n.info.Printf("SaveNotificationRequest: %+v\n", request)
 	return nil
 }
