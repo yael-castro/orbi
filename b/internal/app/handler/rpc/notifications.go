@@ -7,7 +7,7 @@ import (
 	"github.com/yael-castro/orbi/b/pkg/pb"
 )
 
-func NewNotificationServiceServer(notifier business.NotificationCases) (pb.NotificationServiceServer, error) {
+func NewNotificationServiceServer(notifier business.SendNotificationCase) (pb.NotificationServiceServer, error) {
 	if notifier == nil {
 		return nil, fmt.Errorf("%T is nil", notifier)
 	}
@@ -19,7 +19,7 @@ func NewNotificationServiceServer(notifier business.NotificationCases) (pb.Notif
 
 type notificationService struct {
 	pb.UnimplementedNotificationServiceServer
-	notifier business.NotificationCases
+	notifier business.SendNotificationCase
 }
 
 func (s notificationService) SendNotification(ctx context.Context, request *pb.SendNotificationRequest) (*pb.SendNotificationResponse, error) {

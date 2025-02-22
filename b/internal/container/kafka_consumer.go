@@ -71,7 +71,7 @@ func (k *kafkaConsumer) injectConsumer(ctx context.Context, cmd *func(context.Co
 	}
 
 	// Business logic
-	cases, err := business.NewNotificationCases(store)
+	cases, err := business.NewLogNotificationCase(store)
 	if err != nil {
 		return err
 	}

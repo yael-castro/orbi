@@ -2,16 +2,25 @@ package business
 
 import "context"
 
+// Drive adapters
 type (
-	NotificationCases interface {
-		LogNotification(context.Context, Notification) error
-		SendNotification(context.Context, Notification) error
+	SendNotificationCase interface {
+		SendNotification(context.Context, NotificationRequest) error
+	}
+
+	LogNotificationCase interface {
+		LogNotification(context.Context, NotificationRequest) error
 	}
 )
 
+// Driven adapters
 type (
+	UserStore interface {
+		GetUser(context.Context, uint64) (User, error)
+	}
+
 	NotificationStore interface {
 		SendNotification(context.Context, Notification) error
-		SaveNotification(context.Context, Notification) error
+		SaveNotificationRequest(context.Context, NotificationRequest) error
 	}
 )

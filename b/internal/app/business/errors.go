@@ -5,6 +5,7 @@ import "strconv"
 const (
 	_ Error = iota
 	ErrInvalidNotification
+	ErrResourceNotFound
 )
 
 type Error uint16

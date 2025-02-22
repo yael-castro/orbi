@@ -10,7 +10,7 @@ import (
 	"log"
 )
 
-func NotificationMessages(consumer *kafka.Consumer, cases business.NotificationCases, errLogger *log.Logger) func(context.Context) error {
+func NotificationMessages(consumer *kafka.Consumer, cases business.LogNotificationCase, errLogger *log.Logger) func(context.Context) error {
 	return func(ctx context.Context) error {
 		defer func() {
 			_ = consumer.Close()
@@ -34,7 +34,7 @@ func NotificationMessages(consumer *kafka.Consumer, cases business.NotificationC
 			}
 
 			// Decoding idempotency key
-			var notification business.Notification
+			var notification business.NotificationRequest
 
 			for _, header := range message.Headers {
 				if header.Key == idempotencyHeader {

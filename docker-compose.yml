@@ -89,6 +89,7 @@ services:
       dockerfile: Dockerfile
     container_name: notifications_microservice_grpc
     environment:
+      USERS_API_ADDRESS: ${USERS_API_ADDRESS}
       EXECUTABLE: "notifications-grpc"
     ports:
       - "50051:50051"
