@@ -1,4 +1,4 @@
-# Notifications microservice
+# Notification microservice
 
 This project provides an API for manage operations related to notifications (ex. send notifications)
 
